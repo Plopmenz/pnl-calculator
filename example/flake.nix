@@ -1,8 +1,8 @@
 {
   inputs = {
     xnode-manager.url = "github:Openmesh-Network/xnode-manager";
-    xnode-rust-template.url = "github:OpenxAI-Network/xnode-rust-template"; # "path:..";
-    nixpkgs.follows = "xnode-rust-template/nixpkgs";
+    pnl-calculator.url = "github:OpenxAI-Network/pnl-calculator"; # "path:..";
+    nixpkgs.follows = "pnl-calculator/nixpkgs";
   };
 
   outputs = inputs: {
@@ -19,9 +19,9 @@
             hostname = ./xnode-config/hostname;
           };
         }
-        inputs.xnode-rust-template.nixosModules.default
+        inputs.pnl-calculator.nixosModules.default
         {
-          services.xnode-rust-template.enable = true;
+          services.pnl-calculator.enable = true;
         }
       ];
     };

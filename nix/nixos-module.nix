@@ -5,31 +5,31 @@
   ...
 }:
 let
-  cfg = config.services.xnode-rust-template;
-  xnode-rust-template = pkgs.callPackage ./package.nix { };
+  cfg = config.services.pnl-calculator;
+  pnl-calculator = pkgs.callPackage ./package.nix { };
 in
 {
   options = {
-    services.xnode-rust-template = {
+    services.pnl-calculator = {
       enable = lib.mkEnableOption "Enable the rust app";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.xnode-rust-template = { };
-    users.users.xnode-rust-template = {
+    users.groups.pnl-calculator = { };
+    users.users.pnl-calculator = {
       isSystemUser = true;
-      group = "xnode-rust-template";
+      group = "pnl-calculator";
     };
 
-    systemd.services.xnode-rust-template = {
+    systemd.services.pnl-calculator = {
       wantedBy = [ "multi-user.target" ];
       description = "Rust App.";
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${lib.getExe xnode-rust-template}";
-        User = "xnode-rust-template";
-        Group = "xnode-rust-template";
+        ExecStart = "${lib.getExe pnl-calculator}";
+        User = "pnl-calculator";
+        Group = "pnl-calculator";
       };
     };
   };
