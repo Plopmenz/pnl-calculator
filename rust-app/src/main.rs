@@ -65,8 +65,10 @@ fn calculate() -> Result<(), Box<dyn Error>> {
     println!("WETH: {}", end_weth);
 
     let mut realized_trades: Vec<RealizedTrade> = vec![];
+    let mut sold_openx_usd = 0.0;
     for sell in &sells {
         if buys.is_empty() {
+            sold_openx_usd += sell.USDC;
             break;
         }
 
@@ -89,11 +91,13 @@ fn calculate() -> Result<(), Box<dyn Error>> {
             }
         }
         if buys.is_empty() {
+            let realized_sold = sell_usd * ((sell.OPENX - openx) / sell.OPENX);
             realized_trades.push(RealizedTrade {
                 openx: sell.OPENX - openx,
-                sell_usd: sell_usd * ((sell.OPENX - openx) / sell.OPENX),
+                sell_usd: realized_sold,
                 buy_usd,
             });
+            sold_openx_usd += sell_usd - realized_sold;
         } else {
             realized_trades.push(RealizedTrade {
                 openx: sell.OPENX,
@@ -104,6 +108,7 @@ fn calculate() -> Result<(), Box<dyn Error>> {
     }
 
     println!("Realized trades: {:?}", realized_trades);
+    println!("OPENX sold total USD turnover: {}", sold_openx_usd);
 
     let realized_pnl = realized_trades
         .iter()
